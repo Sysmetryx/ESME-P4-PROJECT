@@ -1,0 +1,92 @@
+/*
+_____________________________________________________________________________________________________________________________________
+|																																	|
+|													Puissance 4 C++ Groupe 1  INFO3													|
+|																																	|
+|															Herbin Armelle															|
+|															Laporte Nathan															|
+|															Lefaure Antoine 														|
+|															Loussaut Morgan															|
+|																																	|
+|																																	|
+|																												ESME-Sudria 2017	|
+|				 																								Ver 1.1A			|
+-------------------------------------------------------------------------------------------------------------------------------------
+*/
+
+#include "p4.cpp"
+
+int main()
+{
+	string tmp1;
+	int COL = 0;
+	WIN testWin;
+	P4 JEUX;
+	Grid AIRE;
+	AIRE.setCol(7);
+	AIRE.setLin(6);
+	PlayerHuman player1;
+	Token tokenp1;
+	tokenp1.setType('x');
+	PlayerHuman player2;
+	Token tokenp2;
+	tokenp2.setType('o');
+	AIRE.resize();
+    int comm = 0;
+	cout << "Bienvenue dans le jeu puissance 4" << endl;
+	cout << "Selectionnez une option : " << endl;
+	cout << "1: Commencer une nouvelle partie." << endl << "2: Quitter." <<endl;
+	cin >> comm;
+	switch(comm)
+	{
+		case 1:
+		cout << "Entrez un nom pour le 1er joueur :" << endl;
+		cin >> tmp1;
+		player1.setName(tmp1);
+		cout << "Entrez un nom pour le 2eme joueur :" << endl;
+		cin >> tmp1;
+		player2.setName(tmp1);
+		JEUX.display(&AIRE);
+		while(true)
+		{
+			COL = player1.choseCOLL();
+			JEUX.play(player1, &AIRE, &tokenp1, &COL);
+			if(JEUX.victoireVerticale(COL, AIRE) || (JEUX.HorizontaleD(COL, AIRE) + JEUX.HorizontaleG(COL, AIRE) == 3) || (JEUX.DiagMD(COL, AIRE) + JEUX.DiagDG(COL, AIRE)) == 3 || (JEUX.DiagMG(COL, AIRE) + JEUX.DiagDD(COL, AIRE)) == 3)
+			{
+				testWin.setAll(true, player1.getName());
+				break;
+			}
+			if(AIRE.gIsFull())
+            {
+                break;
+            }
+			COL = player2.choseCOLL();
+			JEUX.play(player2, &AIRE, &tokenp2, &COL);
+			if(JEUX.victoireVerticale(COL, AIRE) || (JEUX.HorizontaleD(COL, AIRE) + JEUX.HorizontaleG(COL, AIRE) == 3) || (JEUX.DiagMD(COL, AIRE) + JEUX.DiagDG(COL, AIRE)) == 3 || (JEUX.DiagMG(COL, AIRE) + JEUX.DiagDD(COL, AIRE)) == 3)
+			{
+				testWin.setAll(true, player2.getName());
+				break;
+			}
+			if(AIRE.gIsFull())
+            {
+                break;
+            }
+		}
+		if(testWin.getisWon())
+		{
+			cout <<"partie terminee, " <<  testWin.getpWinner() << " a gagne ! " << endl;
+		}
+		else
+		{
+			cout <<"match nul !! : " << testWin.getpWinner() << " n a gagne !" << endl;
+		}
+
+        break;
+		case 2:
+			cout << "Merci, au revoir";
+			break;
+		default :
+			return 0;
+	}
+	return 0;
+}
